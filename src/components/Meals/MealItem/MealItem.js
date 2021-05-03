@@ -13,7 +13,7 @@ function MealItem(props) {
         <div className={classes.price}>${props.price.toFixed(2)}</div>
       </div>
       <div>
-        <MealItemForm />
+        <MealItemForm id={props.id} />
       </div>
     </li>
   );
