@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 
 import MealItem from "./MealItem/MealItem";
 import Card from "../UI/Card";
