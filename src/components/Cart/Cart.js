@@ -7,7 +7,7 @@ import CartItem from "./CartItem";
 import Checkout from "./Checkout";
 // import CartContext from "../../store/cart-context";
 import { useSelector, useDispatch } from "react-redux";
-import cartSlice from '../../store/redux-store/cart-slice';
+import { cartActions } from '../../store/redux-store/cart-slice';
 
 function Cart(props) {
   // const cartCtx = useContext(CartContext);
@@ -21,12 +21,12 @@ function Cart(props) {
 
   const cartItemAddHandler = (item) => {
     // cartCtx.addItem({ ...item, amount: 1 });
-    dispatch(cartSlice.actions.add({ ...item, amount: 1 }));
+    dispatch(cartActions.add({ ...item, amount: 1 }));
   };
 
   const cartItemRemoveHandler = (itemId) => {
     // cartCtx.removeItem(itemId);
-    dispatch(cartSlice.actions.remove({ id: itemId }));
+    dispatch(cartActions.remove({ id: itemId }));
   };
 
   const orderHandler = (e) => {
@@ -57,7 +57,7 @@ function Cart(props) {
     setIsSubmitting(false);
     setDidSubmit(true);
     // cartCtx.clearCart();
-    dispatch(cartSlice.actions.clear())
+    dispatch(cartActions.clear())
   };
 
   const modalActions = (
