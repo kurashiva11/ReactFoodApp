@@ -1,26 +1,32 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 
 import classes from "./Cart.module.css";
 import Modal from "../UI/Modal";
 
 import CartItem from "./CartItem";
-import CartContext from "../../store/cart-context";
 import Checkout from "./Checkout";
+// import CartContext from "../../store/cart-context";
+import { useSelector, useDispatch } from "react-redux";
+import cartSlice from '../../store/redux-store/cart-slice';
 
 function Cart(props) {
-  const cartCtx = useContext(CartContext);
+  // const cartCtx = useContext(CartContext);
+  const cartStore = useSelector((state) => state.cartStore);
+  const dispatch = useDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [didSubmit, setDidSubmit] = useState(false);
   const [isCheckout, setIsCheckout] = useState(false);
 
-  const hasitems = cartCtx.items.length > 0;
+  const hasitems = cartStore.items.length > 0;
 
   const cartItemAddHandler = (item) => {
-    cartCtx.addItem({ ...item, amount: 1 });
+    // cartCtx.addItem({ ...item, amount: 1 });
+    dispatch(cartSlice.actions.add({ ...item, amount: 1 }));
   };
 
   const cartItemRemoveHandler = (itemId) => {
-    cartCtx.removeItem(itemId);
+    // cartCtx.removeItem(itemId);
+    dispatch(cartSlice.actions.remove({ id: itemId }));
   };
 
   const orderHandler = (e) => {
@@ -36,7 +42,7 @@ function Cart(props) {
         method: "post",
         body: JSON.stringify({
           user: userData,
-          orderedItems: cartCtx.items,
+          orderedItems: cartStore.items,
         }),
       }
     );
@@ -50,7 +56,8 @@ function Cart(props) {
 
     setIsSubmitting(false);
     setDidSubmit(true);
-    cartCtx.clearCart();
+    // cartCtx.clearCart();
+    dispatch(cartSlice.actions.clear())
   };
 
   const modalActions = (
@@ -69,7 +76,7 @@ function Cart(props) {
   const cartModalContent = (
     <>
       <ul className={classes["cart-item"]}>
-        {cartCtx.items.map((item) => {
+        {cartStore.items.map((item) => {
           return (
             <CartItem
               key={item.id}
@@ -84,7 +91,7 @@ function Cart(props) {
       </ul>
       <div className={classes.total}>
         <span>Total Amount</span>
-        <span>${cartCtx.totalAmount.toFixed(2)}</span>
+        <span>${cartStore.totalAmount.toFixed(2)}</span>
       </div>
       {isCheckout && (
         <Checkout onCancel={props.onCloseCart} onConfirm={submitOrderHandler} />
